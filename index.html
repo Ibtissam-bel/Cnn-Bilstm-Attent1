@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>EmoDet</title>
+<link rel="icon" type="image/png" href="logo1.PNG">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-light: #f0f9ff;
+  --bg-gradient: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.06), transparent 70%),
+                  radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.04), transparent 70%);
+  --card-bg: rgba(255, 255, 255, 0.96);
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border-light: #cbd5e1;
+  --accent: #4682B4;
+  --accent-light: #4682B4;
+  --accent-gradient: linear-gradient(135deg,#4682B4, #4682B4);
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+  background: var(--bg-light);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: -20%;
+  right: -20%;
+  width: 80%;
+  height: 80%;
+  background: var(--bg-gradient);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[dir="rtl"], [dir="rtl"] input, [dir="rtl"] button, [dir="rtl"] select, [dir="rtl"] label {
+  font-family: 'Tajawal', sans-serif !important;
+}
+
+.container {
+  max-width: 560px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+/* Card - corners reduced */
+.iphone-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 28px;
+  box-shadow: var(--shadow-md), 0 0 0 0.5px rgba(0, 0, 0, 0.02);
+  padding: 2rem 1.5rem;
+  transition: all 0.2s ease;
+}
+
+/* صورة اللوغو بدون أي إطار أو خلفية */
+.logo-image{
+  width:200px;
+  height:200px;
+
+  object-fit:contain;
+
+  display:block;
+
+  margin:0 auto 12px;
+
+  background:transparent;
+
+  border:none;
+
+  border-radius:0;
+
+  padding:0;
+
+  box-shadow:none;
+}
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: #eef2ff;
+  border-radius: 50px;
+  padding: 0.25rem;
+  margin-bottom: 2rem;
+}
+
+.tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 0.6rem;
+  border-radius: 40px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.2s;
+  color: var(--text-secondary);
+}
+
+.tab.active {
+  background: white;
+  color: var(--accent);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Form fields - full outlined boxes */
+.input-group {
+  margin-bottom: 1.2rem;
+}
+
+.input-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  margin-bottom: 0.4rem;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: 0.2s;
+}
+
+.input-field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.input-field::placeholder {
+  color: #94a3b8;
+}
+
+select.input-field {
+  appearance: none;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%23475669' d='M6 8L0 0h12z'/></svg>") no-repeat 95% center;
+  background-color: white;
+}
+
+[dir="rtl"] select.input-field {
+  background-position: 5% center;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%23475669' d='M6 0L12 8H0z'/></svg>");
+}
+
+/* Buttons */
+.btn {
+  width: 100%;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.2s;
+  background: var(--accent-gradient);
+  color: white;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  margin-top: 0.5rem;
+}
+
+.btn:hover {
+  transform: scale(0.98);
+  filter: brightness(1.02);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--accent);
+  box-shadow: none;
+  border: 1px solid var(--border-light);
+}
+
+.btn-ghost:hover {
+  background: rgba(37, 99, 235, 0.05);
+  transform: none;
+}
+
+/* Alerts */
+.alert {
+  padding: 0.8rem 1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  margin-bottom: 1rem;
+  display: none;
+  background: #ffffff;
+  border-left: 4px solid;
+}
+
+[dir="rtl"] .alert {
+  border-left: none;
+  border-right: 4px solid;
+}
+
+.alert.show {
+  display: block;
+}
+
+.alert.error {
+  border-left-color: #ef4444;
+  color: #dc2626;
+  background: #fef2f2;
+}
+
+.alert.success {
+  border-left-color: var(--accent);
+  color: var(--accent);
+  background: #eff6ff;
+}
+
+/* Steps */
+.steps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+  background: #f8fafc;
+  padding: 0.4rem 0.8rem;
+  border-radius: 60px;
+}
+
+.step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  transition: 0.2s;
+  transform-origin: center;
+}
+
+[dir="rtl"] .step-dot.active {
+  transform-origin: right;
+}
+
+.step-dot.active {
+  background: var(--accent);
+  width: 24px;
+  border-radius: 20px;
+}
+
+.step-dot.done {
+  background: var(--accent-light);
+}
+
+.step-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  margin-left: 6px;
+  font-weight: 500;
+}
+
+[dir="rtl"] .step-label {
+  margin-left: 0;
+  margin-right: 6px;
+}
+
+/* Avatar */
+.avatar-upload {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #f8fafc;
+  padding: 0.8rem;
+  border-radius: 60px;
+  margin-bottom: 1.2rem;
+}
+
+.avatar-preview {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.2rem;
+  cursor: pointer;
+  overflow: hidden;
+  color: var(--accent);
+}
+
+.avatar-info {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.avatar-info span {
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.section-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent);
+  margin: 1rem 0 0.6rem;
+}
+
+/* Single OTP field */
+.otp-single {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+.otp-single input {
+  width: 100%;
+  max-width: 280px;
+  text-align: center;
+  font-size: 1.8rem;
+  letter-spacing: 12px;
+  padding: 0.8rem;
+  font-weight: 600;
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  outline: none;
+}
+.otp-single input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Password strength */
+.pw-strength {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.strength-bar {
+  flex: 1;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+
+.strength-bar.weak { background: #ef4444; }
+.strength-bar.medium { background: #f59e0b; }
+.strength-bar.strong { background: var(--accent); }
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin: 0 auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.screen { display: none; }
+.screen.active { display: block; animation: fadeUp 0.3s ease; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.lang-switch {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 6px;
+  z-index: 20;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(10px);
+  padding: 0.3rem 0.6rem;
+  border-radius: 40px;
+  border: 0.5px solid rgba(0,0,0,0.05);
+}
+
+.lang-btn {
+  background: transparent;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 30px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.lang-btn.active {
+  background: var(--accent);
+  color: white;
+}
+
+.footer {
+  text-align: center;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: 1.5rem;
+}
+
+.rate-hint {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 0.8rem;
+}
+</style>
+</head>
+<body>
+
+<div class="lang-switch">
+  <button class="lang-btn active" id="btn-fr" onclick="setLang('fr')">FR</button>
+  <button class="lang-btn" id="btn-ar" onclick="setLang('ar')">AR</button>
+</div>
+
+<div class="container">
+  <div class="iphone-card">
+    <!-- استبدال اللوغو بصورة -->
+<div class="logo-area">
+
+  <!-- صورة اللوغو -->
+  <img src="logo.png" alt="Logo" class="logo-image">
+
+
+
+    <!-- LOGIN -->
+    <div class="screen active" id="screen-login">
+      <div class="tabs">
+        <button class="tab active" data-tab="login" id="tab-login-title">Connexion</button>
+        <button class="tab" data-tab="register" id="tab-reg-title">Inscription</button>
+      </div>
+      <div class="alert" id="login-alert"><span id="login-alert-msg"></span></div>
+      <div class="input-group">
+        <label class="input-label" id="lbl-login-email">Email</label>
+        <input type="email" id="login-email" class="input-field" placeholder="votre@email.com" autocomplete="email">
+      </div>
+      <div class="input-group">
+        <label class="input-label" id="lbl-login-pass">Mot de passe</label>
+        <input type="password" id="login-password" class="input-field" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="btn" id="login-btn" onclick="doLogin()">Se connecter</button>
+    </div>
+
+    <!-- REGISTER Multi-step (réparti équitablement) -->
+    <div class="screen" id="screen-register">
+      <div class="tabs">
+        <button class="tab" data-tab="login" id="tab-login-title2">Connexion</button>
+        <button class="tab active" data-tab="register" id="tab-reg-title2">Inscription</button>
+      </div>
+      <div class="steps" id="reg-steps">
+        <div class="step-dot active" id="sd1"></div>
+        <div class="step-dot" id="sd2"></div>
+        <div class="step-dot" id="sd3"></div>
+        <span class="step-label" id="step-label">Compte</span>
+      </div>
+      <div class="alert" id="reg-alert"><span id="reg-alert-msg"></span></div>
+
+      <!-- STEP 1 : Informations du compte -->
+      <div id="reg-step1">
+        <div class="section-title" id="sec-account">Compte</div>
+        <div class="input-group"><label class="input-label" id="lbl-reg-email">Email *</label><input type="email" id="reg-email" class="input-field" placeholder="votre@email.com" autocomplete="email"></div>
+        <div class="input-group"><label class="input-label" id="lbl-reg-pass">Mot de passe *</label><input type="password" id="reg-password" class="input-field" placeholder="Min. 6 caractères" autocomplete="new-password" oninput="checkPwStrength(this.value)">
+          <div class="pw-strength" id="pw-strength"><div class="strength-bar"></div><div class="strength-bar"></div><div class="strength-bar"></div><div class="strength-bar"></div></div>
+        </div>
+        <div class="input-group"><label class="input-label" id="lbl-reg-phone">Téléphone</label><input type="tel" id="reg-phone" class="input-field" placeholder="+213 XX XX XX XX" autocomplete="tel"></div>
+        <div class="input-group"><label class="input-label" id="lbl-reg-lang">Langue</label><select id="reg-lang" class="input-field"><option value="fr">Français</option><option value="ar">العربية</option></select></div>
+        <button class="btn" id="reg-btn-step1" onclick="goToStep2()">Continuer</button>
+      </div>
+
+      <!-- STEP 2 : Informations personnelles + Avatar -->
+      <div id="reg-step2" style="display:none">
+        <div class="avatar-upload">
+          <div class="avatar-preview" id="avatarPreview" onclick="document.getElementById('avatarFile').click()"><span id="avatarInitials">?</span></div>
+          <div class="avatar-info"><strong id="lbl-avatar-title">Photo de profil</strong><br><span id="lbl-avatar-choose" onclick="document.getElementById('avatarFile').click()">Choisir une photo</span></div>
+          <input type="file" id="avatarFile" accept="image/*" style="display:none" onchange="previewAvatar(this)">
+        </div>
+        <div class="section-title" id="sec-personal">Personnel</div>
+        <div class="input-group"><label class="input-label" id="lbl-reg-name">Nom complet *</label><input type="text" id="reg-name" class="input-field" placeholder="Prénom Nom" autocomplete="name" oninput="updateInitials(this.value)"></div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <div class="input-group" style="flex:1"><label class="input-label" id="lbl-reg-birth">Naissance</label><input type="date" id="reg-birth" class="input-field"></div>
+          <div class="input-group" style="flex:1"><label class="input-label" id="lbl-reg-gender">Sexe</label><select id="reg-gender" class="input-field"><option value="" id="opt-g-none">—</option><option value="male" id="opt-g-m">Homme</option><option value="female" id="opt-g-f">Femme</option></select></div>
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <div class="input-group" style="flex:1"><label class="input-label" id="lbl-reg-country">Pays</label><input type="text" id="reg-country" class="input-field" placeholder="Algérie"></div>
+          <div class="input-group" style="flex:1"><label class="input-label" id="lbl-reg-city">Ville</label><input type="text" id="reg-city" class="input-field" placeholder="Alger"></div>
+        </div>
+        <div class="input-group"><label class="input-label" id="lbl-reg-prof">Profession</label><input type="text" id="reg-profession" class="input-field" placeholder="Étudiant"></div>
+        <button class="btn" id="reg-btn-step2" onclick="doRegister()">Créer le compte</button>
+      </div>
+
+      <!-- STEP 3 : Vérification OTP (Email + Phone) -->
+      <div id="reg-step3" style="display:none">
+        <div style="text-align:center; margin:1rem 0; color:var(--text-muted)"><span id="lbl-otp-email-msg">Code envoyé à</span> <strong id="verify-email-display" style="color:var(--accent)"></strong></div>
+        <div class="otp-single"><input type="text" id="otp-code" maxlength="6" placeholder="000000" inputmode="numeric" autocomplete="one-time-code"></div>
+        <button class="btn" id="btn-verify-email" onclick="doVerifyEmailOTP()">Vérifier l'email</button>
+        <span style="display:block; text-align:center; margin-top:1rem; font-size:0.7rem; color:var(--accent); cursor:pointer;" id="lbl-resend" onclick="resendCode()">Renvoyer le code</span>
+        <!-- Si l'utilisateur a un téléphone, on affiche aussi la vérification SMS -->
+        <div id="phone-otp-section" style="display:none; margin-top: 1.5rem;">
+          <hr style="margin: 1rem 0; border-color: var(--border-light);">
+          <div style="text-align:center; margin-bottom:1rem;"><span id="lbl-otp-phone-msg">Code SMS envoyé à</span> <strong id="phone-display" style="color:var(--accent)"></strong></div>
+          <div class="otp-single"><input type="text" id="sms-code" maxlength="6" placeholder="000000" inputmode="numeric"></div>
+          <button class="btn" id="btn-verify-phone" onclick="doVerifyPhoneOTP()">Vérifier le téléphone</button>
+          <button class="btn btn-ghost" style="margin-top:0.8rem;" id="btn-skip" onclick="finishReg()">Passer cette étape</button>
+        </div>
+      </div>
+      <div class="rate-hint" id="rate-hint">⏱️ Protection anti-spam: quelques secondes entre les envois de code</div>
+    </div>
+  </div>
+  <div class="footer" id="footer-text">SER Platform © 2025 — Projet pluridisciplinaire S8</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+// ================= CONFIG =================
+const AUTH_API = 'http://10.151.43.126:8001';
+
+// ── EmailJS Config ─────────────────────────────────────
+const EMAILJS_SERVICE_ID  = 'service_iness';
+const EMAILJS_TEMPLATE_ID = 'template_k03nht3';
+const EMAILJS_PUBLIC_KEY  = 'gW0fPuo88SvgYy0eV';
+
+async function sendViaEmailJS(toEmail, otpCode) {
+  emailjs.init(EMAILJS_PUBLIC_KEY);
+  const result = await emailjs.send(
+    EMAILJS_SERVICE_ID,
+    EMAILJS_TEMPLATE_ID,
+    { to_email: toEmail, otp_code: otpCode }
+  );
+  if (result.status !== 200) throw new Error('EmailJS: echec (' + result.status + ')');
+}
+
+const SER_API  = 'http://10.151.43.126:8000';
+
+let regEmail = '', regToken = '', regPhone = '', avatarFile = null, currentLang = 'fr';
+let stepBeforeAction = 1;
+let userFullData = {}; // stockage temporaire avant envoi final
+
+// ================= TRANSLATIONS =================
+const translations = {
+  fr: {
+    sub: "Speech Emotion Recognition", login: "Connexion", register: "Inscription",
+    email: "Email", pass: "Mot de passe", connect: "Se connecter",
+    vEmail: "Vérification email", vPhone: "Vérification téléphone", personal: "Personnel",
+    fullname: "Nom complet *", birth: "Naissance", gender: "Sexe", gNone: "—", gM: "Homme", gF: "Femme",
+    country: "Pays", city: "Ville", profession: "Profession", account: "Compte", phone: "Téléphone",
+    avatarT: "Photo de profil", avatarC: "Choisir une photo", continue: "Continuer", createAccount: "Créer le compte",
+    codeSentEmail: "Code envoyé à", codeSentPhone: "Code SMS envoyé à", verifyEmail: "Vérifier l'email",
+    verifyPhone: "Vérifier le téléphone", resend: "Renvoyer le code", skip: "Passer cette étape",
+    footer: "SER Platform © 2025 — Projet pluridisciplinaire S8", emptyFields: "Veuillez remplir tous les champs",
+    reqFields: "Champs obligatoires (*)", rateHint: "⏱️ Protection anti-spam: quelques secondes entre les envois de code",
+    language: "Langue"
+  },
+  ar: {
+    sub: "التعرف على المشاعر من خلال الكلام", login: "تسجيل الدخول", register: "إنشاء حساب",
+    email: "البريد الإلكتروني", pass: "كلمة المرور", connect: "تسجيل الدخول",
+    vEmail: "تأكيد البريد", vPhone: "تأكيد الهاتف", personal: "البيانات الشخصية",
+    fullname: "الاسم الكامل *", birth: "تاريخ الميلاد", gender: "الجنس", gNone: "—", gM: "ذكر", gF: "أنثى",
+    country: "البلد", city: "المدينة", profession: "المهنة", account: "الحساب", phone: "رقم الهاتف",
+    avatarT: "الصورة الشخصية", avatarC: "اختر صورة", continue: "متابعة", createAccount: "إنشاء الحساب",
+    codeSentEmail: "تم إرسال الرمز إلى", codeSentPhone: "تم إرسال رمز SMS إلى", verifyEmail: "تأكيد البريد الإلكتروني",
+    verifyPhone: "تأكيد رقم الهاتف", resend: "إعادة إرسال الرمز", skip: "تخطي هذه الخطوة",
+    footer: "منصة SER © 2025 — مشروع متعدد التخصصات S8", emptyFields: "يرجى ملء جميع الحقول",
+    reqFields: "الحقول الإلزامية (*)", rateHint: "⏱️ حماية من البريد العشوائي: بضع ثوانٍ بين عمليات إرسال الرمز",
+    language: "اللغة"
+  }
+};
+
+function setLang(l) {
+  currentLang = l;
+  document.documentElement.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
+  document.documentElement.lang = l;
+  document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.id === `btn-${l}`));
+
+  const t = translations[l];
+  document.getElementById('sub-title').innerText = t.sub;
+  document.getElementById('tab-login-title').innerText = t.login;
+  document.getElementById('tab-login-title2').innerText = t.login;
+  document.getElementById('tab-reg-title').innerText = t.register;
+  document.getElementById('tab-reg-title2').innerText = t.register;
+  document.getElementById('lbl-login-email').innerText = t.email;
+  document.getElementById('lbl-login-pass').innerText = t.pass;
+  document.getElementById('login-btn').innerText = t.connect;
+  document.getElementById('sec-personal').innerText = t.personal;
+  document.getElementById('sec-account').innerText = t.account;
+  document.getElementById('lbl-reg-name').innerText = t.fullname;
+  document.getElementById('lbl-reg-birth').innerText = t.birth;
+  document.getElementById('lbl-reg-gender').innerText = t.gender;
+  document.getElementById('opt-g-none').innerText = t.gNone;
+  document.getElementById('opt-g-m').innerText = t.gM;
+  document.getElementById('opt-g-f').innerText = t.gF;
+  document.getElementById('lbl-reg-country').innerText = t.country;
+  document.getElementById('lbl-reg-city').innerText = t.city;
+  document.getElementById('lbl-reg-prof').innerText = t.profession;
+  document.getElementById('lbl-reg-email').innerText = t.email;
+  document.getElementById('lbl-reg-phone').innerText = t.phone;
+  document.getElementById('lbl-reg-pass').innerText = t.pass;
+  document.getElementById('lbl-reg-lang').innerText = t.language; // ✅ تم التصحيح
+  document.getElementById('lbl-avatar-title').innerText = t.avatarT;
+  document.getElementById('lbl-avatar-choose').innerText = t.avatarC;
+  document.getElementById('lbl-otp-email-msg').innerText = t.codeSentEmail;
+  document.getElementById('btn-verify-email').innerText = t.verifyEmail;
+  document.getElementById('lbl-resend').innerText = t.resend;
+  document.getElementById('lbl-otp-phone-msg').innerText = t.codeSentPhone;
+  document.getElementById('btn-verify-phone').innerText = t.verifyPhone;
+  document.getElementById('btn-skip').innerText = t.skip;
+  document.getElementById('footer-text').innerText = t.footer;
+  document.getElementById('rate-hint').innerText = t.rateHint;
+  goStep(stepBeforeAction);
+}
+
+function updateRegisterButtonText() { /* not needed anymore because step2 has its own button */ }
+
+// ================= SWITCH TABS =================
+function switchToTab(tabId) {
+  document.getElementById('screen-login').classList.remove('active');
+  document.getElementById('screen-register').classList.remove('active');
+  document.getElementById(`screen-${tabId}`).classList.add('active');
+  document.querySelectorAll('.tab').forEach(btn => {
+    if (btn.getAttribute('data-tab') === tabId) btn.classList.add('active');
+    else btn.classList.remove('active');
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      switchToTab(btn.getAttribute('data-tab'));
+    });
+  });
+  setLang(currentLang);
+});
+
+// ================= AVATAR =================
+function previewAvatar(input) {
+  if (input.files && input.files[0]) {
+    avatarFile = input.files[0];
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById('avatarPreview').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover">`;
+    };
+    reader.readAsDataURL(avatarFile);
+  }
+}
+function updateInitials(name) {
+  const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2) || '?';
+  const preview = document.getElementById('avatarPreview');
+  if (!preview.querySelector('img')) document.getElementById('avatarInitials').innerText = initials;
+}
+
+function checkPwStrength(pw) {
+  let strength = 0;
+  if (pw.length >= 6) strength++;
+  if (pw.length >= 10) strength++;
+  if (/[A-Z]/.test(pw) && /[0-9]/.test(pw)) strength++;
+  if (/[^A-Za-z0-9]/.test(pw)) strength++;
+  const bars = document.querySelectorAll('#pw-strength .strength-bar');
+  bars.forEach((bar, idx) => {
+    bar.className = 'strength-bar';
+    if (idx < strength) bar.classList.add(strength <= 1 ? 'weak' : strength <= 2 ? 'medium' : 'strong');
+  });
+}
+
+function showAlert(id, type, msg) {
+  const el = document.getElementById(id);
+  el.className = `alert show ${type}`;
+  el.querySelector('span').innerText = msg;
+  setTimeout(() => el.classList.remove('show'), 5000);
+}
+
+function setLoading(id, loading, originalText) {
+  const btn = document.getElementById(id);
+  if(btn) {
+    btn.disabled = loading;
+    btn.innerHTML = loading ? '<div class="spinner"></div>' : originalText;
+  }
+}
+
+function goStep(n) {
+  stepBeforeAction = n;
+  document.getElementById('reg-step1').style.display = n === 1 ? 'block' : 'none';
+  document.getElementById('reg-step2').style.display = n === 2 ? 'block' : 'none';
+  document.getElementById('reg-step3').style.display = n === 3 ? 'block' : 'none';
+  for (let i=1; i<=3; i++) {
+    const dot = document.getElementById(`sd${i}`);
+    dot.classList.remove('active', 'done');
+    if (i < n) dot.classList.add('done');
+    else if (i === n) dot.classList.add('active');
+  }
+  const labelsFR = {1:'Compte', 2:'Informations', 3:'Vérification'};
+  const labelsAR = {1:'الحساب', 2:'المعلومات', 3:'التحقق'};
+  document.getElementById('step-label').innerText = currentLang === 'ar' ? labelsAR[n] : labelsFR[n];
+}
+
+function goToStep2() {
+  const email = document.getElementById('reg-email').value.trim();
+  const pass = document.getElementById('reg-password').value;
+  const phone = document.getElementById('reg-phone').value.trim();
+  const lang = document.getElementById('reg-lang').value;
+  const t = translations[currentLang];
+  const emailRegex = /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/;
+  if (!emailRegex.test(email)) return showAlert('reg-alert', 'error', 'Format d\'email invalide');
+  if (!email || !pass) return showAlert('reg-alert', 'error', t.reqFields);
+  if (pass.length < 6) return showAlert('reg-alert', 'error', 'Mot de passe trop court (min 6)');
+  // stockage temporaire
+  userFullData = { email, password: pass, phone: phone || null, language: lang };
+  goStep(2);
+}
+
+// ================= FINAL REGISTER =================
+async function doRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const birth = document.getElementById('reg-birth').value || null;
+  const gender = document.getElementById('reg-gender').value || null;
+  const country = document.getElementById('reg-country').value.trim() || null;
+  const city = document.getElementById('reg-city').value.trim() || null;
+  const profession = document.getElementById('reg-profession').value.trim() || null;
+
+  const t = translations[currentLang];
+  if (!name) return showAlert('reg-alert', 'error', t.reqFields);
+
+  setLoading('reg-btn-step2', true, t.createAccount);
+  try {
+    const body = {
+      ...userFullData,
+      fullname: name,
+      birthdate: birth,
+      gender,
+      country,
+      city,
+      profession
+    };
+    const res = await fetch(`${AUTH_API}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Erreur inscription');
+    regEmail = userFullData.email;
+    regPhone = userFullData.phone;
+    document.getElementById('verify-email-display').innerText = regEmail;
+    if (regPhone) {
+      document.getElementById('phone-display').innerText = regPhone;
+      document.getElementById('phone-otp-section').style.display = 'block';
+    }
+    // Envoyer le code via EmailJS
+    const codeRes = await fetch(`${AUTH_API}/auth/get-email-code`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: regEmail })
+    });
+    const codeData = await codeRes.json();
+    if (!codeRes.ok) throw new Error(codeData.detail || 'Erreur génération code');
+    await sendViaEmailJS(regEmail, codeData.code);
+    showAlert('reg-alert', 'success', 'Code envoyé à votre email !');
+    goStep(3);
+  } catch (err) {
+    showAlert('reg-alert', 'error', err.message);
+  } finally {
+    setLoading('reg-btn-step2', false, t.createAccount);
+  }
+}
+
+// ================= OTP (Single field) =================
+async function doVerifyEmailOTP() {
+  const code = document.getElementById('otp-code').value.trim();
+  if (code.length < 6) return showAlert('reg-alert', 'error', 'Code incomplet (6 chiffres)');
+  const t = translations[currentLang];
+  setLoading('btn-verify-email', true, t.verifyEmail);
+  try {
+    const res = await fetch(`${AUTH_API}/auth/verify-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: regEmail, code })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Code invalide');
+    regToken = data.token;
+    localStorage.setItem('ser_token', regToken);
+    localStorage.setItem('ser_user', JSON.stringify(data.user));
+    if (avatarFile && regToken) {
+      const fd = new FormData();
+      fd.append('file', avatarFile, avatarFile.name);
+      await fetch(`${AUTH_API}/auth/avatar`, { method: 'POST', headers: { 'Authorization': `Bearer ${regToken}` }, body: fd });
+    }
+    if (regPhone) {
+      const smsRes = await fetch(`${AUTH_API}/auth/send-phone-code`, { method: 'POST', headers: { 'Authorization': `Bearer ${regToken}` } });
+      const smsData = await smsRes.json();
+      showAlert('reg-alert', 'success', 'Code SMS envoyé !');
+    } else {
+      finishReg();
+    }
+  } catch (err) {
+    showAlert('reg-alert', 'error', err.message);
+  } finally {
+    setLoading('btn-verify-email', false, t.verifyEmail);
+  }
+}
+
+async function doVerifyPhoneOTP() {
+  const code = document.getElementById('sms-code').value.trim();
+  if (code.length < 6) return showAlert('reg-alert', 'error', 'Code SMS incomplet');
+  const t = translations[currentLang];
+  setLoading('btn-verify-phone', true, t.verifyPhone);
+  try {
+    const res = await fetch(`${AUTH_API}/auth/verify-phone`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${regToken}` },
+      body: JSON.stringify({ phone: regPhone, code })
+    });
+    if (!res.ok) throw new Error('Code SMS invalide');
+    finishReg();
+  } catch (err) {
+    showAlert('reg-alert', 'error', err.message);
+  } finally {
+    setLoading('btn-verify-phone', false, t.verifyPhone);
+  }
+}
+
+function finishReg() { window.location.href = 'dashboard.html'; }
+
+async function resendCode() {
+  try {
+    const res = await fetch(`${AUTH_API}/auth/resend-code`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: regEmail }) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Erreur');
+    // Récupérer le nouveau code et l'envoyer via EmailJS
+    const codeRes = await fetch(`${AUTH_API}/auth/get-email-code`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: regEmail })
+    });
+    const codeData = await codeRes.json();
+    if (!codeRes.ok) throw new Error(codeData.detail || 'Erreur code');
+    await sendViaEmailJS(regEmail, codeData.code);
+    showAlert('reg-alert', 'success', 'Nouveau code envoyé à votre email !');
+  } catch (err) {
+    showAlert('reg-alert', 'error', err.message || 'Erreur renvoi');
+  }
+}
+
+// ================= LOGIN =================
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-password').value;
+  const t = translations[currentLang];
+  if (!email || !pass) return showAlert('login-alert', 'error', t.emptyFields);
+  const emailRegex = /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/;
+  if (!emailRegex.test(email)) return showAlert('login-alert', 'error', 'Format d\'email invalide');
+  setLoading('login-btn', true, t.connect);
+  try {
+    const res = await fetch(`${AUTH_API}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Échec connexion');
+    if (!data.token) throw new Error('Token manquant');
+    localStorage.setItem('ser_token', data.token);
+    localStorage.setItem('ser_user', JSON.stringify(data.user));
+    localStorage.setItem('ser_lang', data.user.language || 'fr');
+    window.location.href = 'dashboard.html';
+  } catch (err) {
+    showAlert('login-alert', 'error', err.message);
+    setLoading('login-btn', false, t.connect);
+  }
+}
+
+if (localStorage.getItem('ser_token')) window.location.href = 'dashboard.html';
+</script>
+</body>
+</html>

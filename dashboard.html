@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>EmoDet Accueil</title>
+<link rel="icon" type="image/png" href="logo1.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-light: #f5f9ff;
+  --surface-white: #ffffff;
+  --border-light: #e9eef3;
+  --text-primary: #1e2a3e;
+  --text-secondary: #4a5b6e;
+  --text-muted: #7e8b9c;
+  --accent:#4682B4;
+  --accent-light:#4682B4;
+  --accent-gradient: linear-gradient(135deg,#4682B4, #4682B4);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.02);
+  --sidebar-width: 260px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-light);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+[dir="rtl"], [dir="rtl"] input, [dir="rtl"] button, [dir="rtl"] select, [dir="rtl"] label {
+  font-family: 'Tajawal', sans-serif !important;
+}
+
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar modern */
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--surface-white);
+  border-right: 1px solid var(--border-light);
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+
+[dir="rtl"] .sidebar {
+  left: auto;
+  right: 0;
+  border-right: none;
+  border-left: 1px solid var(--border-light);
+}
+
+.sidebar-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+/* صورة اللوغو بدون أي إطار أو خلفية */
+.logo-image{
+  width:150px;
+  height:150px;
+
+  object-fit:contain;
+
+  display:block;
+
+  margin:0 auto 12px;
+
+  background:transparent;
+
+  border:none;
+
+  border-radius:0;
+
+  padding:0;
+
+  box-shadow:none;
+}
+
+.nav-section {
+  padding: 1rem 1rem;
+}
+
+
+
+.nav-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+  padding-left: 0.5rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+[dir="rtl"] .nav-item {
+  text-align: right;
+}
+
+.nav-item svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 1.7;
+}
+
+.nav-item:hover {
+  background: #f0f4fa;
+  color: var(--accent);
+}
+
+.nav-item.active {
+  background: #eef2ff;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 1rem;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  background: var(--accent-gradient);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+  overflow: hidden;
+  flex-shrink: 0;
+  color: white;
+}
+
+.user-info {
+  flex: 1;
+  overflow: hidden;
+}
+
+.user-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-email {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logout-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 6px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.logout-btn:hover {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+/* Main content */
+.main-content {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  min-height: 100vh;
+}
+
+[dir="rtl"] .main-content {
+  margin-left: 0;
+  margin-right: var(--sidebar-width);
+}
+
+.topbar {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0.8rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.page-title h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.page-title p {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.api-status {
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0f4fa;
+  padding: 4px 10px;
+  border-radius: 40px;
+}
+
+.api-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+}
+
+.api-dot.ok {
+  background: #10b981;
+}
+
+.lang-switch {
+  display: flex;
+  gap: 4px;
+}
+
+.lang-btn {
+  background: transparent;
+  border: 1px solid var(--border-light);
+  padding: 4px 10px;
+  border-radius: 30px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: 0.2s;
+}
+
+.lang-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.content-wrapper {
+  padding: 1.8rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Cards */
+.card {
+  background: var(--surface-white);
+  border-radius: 20px;
+  border: 1px solid var(--border-light);
+  padding: 1.2rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.card-title svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--accent);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: var(--surface-white);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: 1rem;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  opacity: 0.15;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.stat-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.stat-sub {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.grid-profile {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 1rem;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.form-input, select.form-input {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  background: white;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.form-input:focus, select.form-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(44, 107, 255, 0.1);
+}
+
+.btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-primary {
+  background: var(--accent-gradient);
+  color: white;
+  box-shadow: 0 2px 6px rgba(44, 107, 255, 0.2);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.02);
+  box-shadow: 0 4px 12px rgba(44, 107, 255, 0.25);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(44,107,255,0.05);
+}
+
+.btn-full {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Recording */
+.waveform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 60px;
+  margin: 1rem 0;
+}
+
+.wave-bar {
+  width: 5px;
+  border-radius: 3px;
+  background: var(--accent);
+  transition: height 0.1s;
+}
+
+.rec-active .wave-bar {
+  animation: wave 0.9s infinite alternate;
+}
+
+@keyframes wave {
+  0% { height: 8px; }
+  100% { height: 48px; }
+}
+
+.rec-timer {
+  font-family: 'Syne', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.analysis-zone {
+  border: 2px dashed var(--border-light);
+  border-radius: 20px;
+  padding: 1.2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 1rem;
+  background: #fafdff;
+}
+
+.analysis-zone:hover, .analysis-zone.dragover {
+  border-color: var(--accent);
+  background: #f0f7ff;
+}
+
+.file-info-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+  border-radius: 40px;
+  padding: 0.4rem 0.8rem;
+  margin: 0.5rem 0;
+  font-size: 0.75rem;
+}
+
+.remove-file-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #94a3b8;
+  font-size: 1.1rem;
+  padding: 0 4px;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+
+.remove-file-btn:hover {
+  color: #ef4444;
+  background: rgba(239,68,68,0.1);
+}
+
+.result-box {
+  background: #f8fafc;
+  border-radius: 20px;
+  padding: 1.2rem;
+  margin-top: 1rem;
+  display: none;
+  border: 1px solid var(--border-light);
+}
+
+.result-box.show {
+  display: block;
+  animation: fadeSlide 0.3s ease;
+}
+
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.prob-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  font-size: 0.8rem;
+}
+
+.prob-track {
+  flex: 1;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.prob-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+
+/* Tables */
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.history-table th {
+  text-align: left;
+  padding: 0.6rem 0.4rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.history-table td {
+  padding: 0.6rem 0.4rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.emo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 12px;
+  border-radius: 40px;
+  font-weight: 500;
+  background: rgba(44,107,255,0.1);
+}
+
+/* Profile */
+.profile-avatar-big {
+  width: 90px;
+  height: 90px;
+  background: var(--accent-gradient);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  overflow: hidden;
+  color: white;
+}
+
+.verify-badge {
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border-radius: 40px;
+  background: #f1f5f9;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.8rem;
+}
+
+/* OTP single field */
+.otp-single {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+.otp-single input {
+  width: 100%;
+  max-width: 240px;
+  text-align: center;
+  font-size: 1.5rem;
+  letter-spacing: 10px;
+  padding: 0.6rem;
+  font-weight: 600;
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  outline: none;
+}
+.otp-single input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(44,107,255,0.1);
+}
+
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: white;
+  border-radius: 60px;
+  padding: 0.6rem 1.2rem;
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+  font-size: 0.8rem;
+  z-index: 100;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.3s;
+  border: 1px solid var(--border-light);
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.chart-wrap, .chart-wrap-sm {
+  position: relative;
+  height: 200px;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin: 0 auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.page {
+  display: none;
+  animation: fadeIn 0.25s ease;
+}
+.page.active {
+  display: block;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .grid-2, .grid-3, .grid-profile { grid-template-columns: 1fr; }
+  .sidebar { transform: translateX(-100%); position: fixed; z-index: 999; height: 100%; }
+  .main-content { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <button onclick="document.querySelector('.sidebar').style.transform='translateX(0)'" style="position:fixed;top:10px;left:10px;z-index:1000;background:#6c63ff;color:white;border:none;border-radius:8px;padding:8px 12px;font-size:20px;cursor:pointer;display:block">☰</button><aside class="sidebar" style="transition:transform 0.3s">
+      <!-- استبدال اللوغو بصورة -->
+<div class="logo-area">
+
+  <!-- صورة اللوغو -->
+  <img src="logo.png" alt="Logo" class="logo-image">
+
+
+
+    <div class="nav-section"><div class="nav-label">Principal</div>
+      <button class="nav-item active" data-page="overview"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>Tableau de bord</span></button>
+      <button class="nav-item" data-page="analyse"><svg viewBox="0 0 24 24"><path d="M9 19V6l12-3v13"/><circle cx="7" cy="19" r="2"/><circle cx="21" cy="16" r="2"/></svg><span>Analyser</span></button>
+      <button class="nav-item" data-page="historique"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Historique</span></button>
+    </div>
+    <div class="nav-section"><div class="nav-label">Statistiques</div>
+      <button class="nav-item" data-page="stats"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Graphiques</span></button>
+    </div>
+    <div class="nav-section"><div class="nav-label">Compte</div>
+      <button class="nav-item" data-page="profil"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Mon profil</span></button>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-avatar" id="sideAvatar"></div>
+      <div class="user-info"><div class="user-name" id="sideName">—</div><div class="user-email" id="sideEmail"></div></div>
+      <button class="logout-btn" onclick="doLogout()"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="topbar">
+      <div class="page-title"><h1 id="topbar-title">Tableau de bord</h1><p id="topbar-sub">Bienvenue</p></div>
+      <div class="topbar-actions"><div class="api-status"><span class="api-dot" id="api-dot"></span><span id="api-status-txt">API</span></div><div class="lang-switch"><button class="lang-btn active" id="lb-fr" onclick="setLang('fr')">FR</button><button class="lang-btn" id="lb-ar" onclick="setLang('ar')">AR</button></div></div>
+    </div>
+    <div class="content-wrapper">
+      <!-- OVERVIEW -->
+      <div class="page active" id="page-overview">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="stat-label">Total analyses</div><div class="stat-value" id="ov-total">—</div><div class="stat-sub">depuis le début</div></div>
+          <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><div class="stat-label">Cette semaine</div><div class="stat-value" id="ov-week">—</div><div class="stat-sub">7 derniers jours</div></div>
+          <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/></svg></div><div class="stat-label">Ce mois</div><div class="stat-value" id="ov-month">—</div><div class="stat-sub">30 jours</div></div>
+          <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div><div class="stat-label">Émotion dominante</div><div class="stat-value" id="ov-top">—</div><div class="stat-sub" id="ov-top-sub"></div></div>
+        </div>
+        <div class="grid-3">
+          <div class="card"><div class="card-title"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg><span>Activité 7 jours</span></div><div class="chart-wrap"><canvas id="dailyChart"></canvas></div></div>
+          <div class="card"><div class="card-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span>Répartition émotions</span></div><div class="chart-wrap"><canvas id="donutChart"></canvas></div></div>
+        </div>
+        <div class="card"><div class="card-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span>Analyses récentes</span><button class="btn btn-ghost" style="margin-left:auto;padding:4px 12px" onclick="goPage('analyse')">+ Nouvelle</button></div>
+          <table class="history-table"><thead><th>Émotion</th><th>Confiance</th><th>Fichier</th><th>Date</th></thead><tbody id="recent-tbody"><tr><td colspan="4" class="empty">Chargement...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ANALYSE -->
+      <div class="page" id="page-analyse">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg><span>Enregistrement vocal</span></div>
+            <div class="waveform" id="dash-waveform"><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div></div>
+            <div class="rec-timer" id="dash-timer">00:00</div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn btn-primary" style="flex:1" id="dash-rec-btn" onclick="toggleRec()"><span id="rec-pulse"></span> <span id="rec-btn-text">Enregistrer</span></button>
+              <button class="btn btn-ghost" id="dash-analyze-rec" disabled onclick="analyzeRec()">Analyser</button>
+            </div>
+          </div>
+          <div class="card"><div class="card-title"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/></svg><span>Importer un fichier</span></div>
+            <div class="analysis-zone" id="dash-drop" onclick="document.getElementById('dash-file').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event)"><div style="font-size:2rem;">🎵</div><div style="font-size:0.8rem; font-weight:500;">Glissez votre fichier audio</div><div style="font-size:0.7rem;">WAV, MP3, M4A</div></div>
+            <input type="file" id="dash-file" accept=".wav,.mp3,.m4a" style="display:none" onchange="handleFile(this.files[0])">
+            <div id="dash-file-info" class="file-info-wrapper" style="display:none;"></div>
+            <button class="btn btn-primary btn-full" id="dash-analyze-file" disabled onclick="analyzeFile()">Analyser le fichier</button>
+          </div>
+        </div>
+        <div class="result-box" id="dash-result"></div>
+      </div>
+
+      <!-- HISTORIQUE -->
+      <div class="page" id="page-historique">
+        <div class="card"><div class="card-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span>Toutes les analyses</span></div>
+          <table class="history-table"><thead><th>#</th><th>Émotion</th><th>Confiance</th><th>Fichier</th><th>Date</th></thead><tbody id="all-tbody"><tr><td colspan="5" class="empty">Chargement...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="page" id="page-stats">
+        <div class="grid-2"><div class="card"><div class="card-title"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/></svg><span>Semaine par émotion</span></div><div class="chart-wrap-sm"><canvas id="weekChart"></canvas></div></div>
+        <div class="card"><div class="card-title"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>Mois par émotion</span></div><div class="chart-wrap-sm"><canvas id="monthChart"></canvas></div></div></div>
+        <div class="card"><div class="card-title"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg><span>Activité quotidienne (7j)</span></div><div class="chart-wrap-sm"><canvas id="dailyChart2"></canvas></div></div>
+      </div>
+
+      <!-- PROFIL -->
+      <div class="page" id="page-profil">
+        <div class="grid-profile">
+          <div class="card" style="padding:0"><div style="display:flex; flex-direction:column; align-items:center; padding:1.5rem; border-bottom:1px solid var(--border-light)"><div class="profile-avatar-big" id="prof-avatar-big" onclick="document.getElementById('prof-avatar-file').click()"></div><input type="file" id="prof-avatar-file" accept="image/*" style="display:none" onchange="uploadAvatar(this)"><div class="profile-name" id="prof-name-big">—</div><div class="profile-role" id="prof-role">—</div><div style="margin-top:8px; display:flex; gap:6px;"><span class="verify-badge" id="badge-email">Email</span><span class="verify-badge" id="badge-phone">Téléphone</span></div></div><div style="padding:1rem;"><div class="info-row"><span>Âge</span><span id="pf-age">—</span></div><div class="info-row"><span>Naissance</span><span id="pf-birth">—</span></div><div class="info-row"><span>Sexe</span><span id="pf-gender">—</span></div><div class="info-row"><span>Localisation</span><span id="pf-location">—</span></div><div class="info-row"><span>Téléphone</span><span id="pf-phone">—</span></div><div class="info-row"><span>Langue</span><span id="pf-lang">—</span></div></div></div>
+          <div style="display:flex; flex-direction:column; gap:1rem"><div class="card"><div class="card-title"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span>Modifier le profil</span></div><div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:12px"><div class="form-group"><label class="form-label">Nom complet</label><input class="form-input" id="edit-name"></div><div class="form-group"><label class="form-label">Profession</label><input class="form-input" id="edit-profession"></div></div><div class="form-row"><div class="form-group"><label class="form-label">Date naissance</label><input type="date" class="form-input" id="edit-birth"></div><div class="form-group"><label class="form-label">Sexe</label><select class="form-input" id="edit-gender"><option value="">—</option><option value="male">Homme</option><option value="female">Femme</option></select></div></div><div class="form-row"><div class="form-group"><label class="form-label">Pays</label><input class="form-input" id="edit-country"></div><div class="form-group"><label class="form-label">Ville</label><input class="form-input" id="edit-city"></div></div><div class="form-row"><div class="form-group"><label class="form-label">Téléphone</label><input class="form-input" id="edit-phone"></div><div class="form-group"><label class="form-label">Langue</label><select class="form-input" id="edit-lang"><option value="fr">Français</option><option value="ar">العربية</option></select></div></div><button class="btn btn-primary" onclick="saveProfile()">Enregistrer</button></div><div class="card"><div class="card-title"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.82 19a19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.18 4.4 2 2 0 0 1 4.18 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.34 1.85.574 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>Vérification téléphone</span></div><p style="font-size:0.7rem; color:var(--text-muted); margin-bottom:8px;">Entrez votre numéro et cliquez sur envoyer.</p><button class="btn btn-primary" id="send-sms-btn" onclick="sendPhoneCode()">Envoyer le code SMS</button><div id="phone-otp-area" style="display:none; margin-top:1rem"><div class="otp-single"><input type="text" id="phone-otp-code" maxlength="6" placeholder="000000" inputmode="numeric"></div><button class="btn btn-primary" onclick="confirmPhone()">Confirmer</button></div></div></div></div>
+      </div>
+    </div>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ================= CONFIGURATION =================
+const SER_API = 'http://10.151.43.126:8000';
+const AUTH_API = 'http://10.151.43.126:8001';
+const EMO_COLORS = { angry:'#E24B4A', disgust:'#48bb78', fear:'#7c6ff7', happy:'#ECC94B', neutral:'#888', sad:'#4facfe' };
+const EMO_EMOJI = { angry:'😡', disgust:'🤢', fear:'😨', happy:'😊', neutral:'😐', sad:'😢' };
+let token = localStorage.getItem('ser_token');
+let user = JSON.parse(localStorage.getItem('ser_user') || '{}');
+let lang = localStorage.getItem('ser_lang') || user.language || 'fr';
+let charts = {};
+
+// Recording variables (simple)
+let dashRec = null, dashChunks = [], dashBlob = null, dashSecs = 0, dashTimer = null;
+
+if (!token) window.location.href = 'index.html';
+
+// ================= I18N =================
+function t(key) {
+  const dict = {
+    fr: { dashboard: "Tableau de bord", analyse: "Analyser", historique: "Historique", stats: "Graphiques", profil: "Profil", total_analyses: "Total analyses", week: "Cette semaine", month: "Ce mois", top_emotion: "Émotion dominante", activity: "Activité 7 jours", repartition: "Répartition émotions", recent: "Analyses récentes", new_analysis: "+ Nouvelle", emotion: "Émotion", confidence: "Confiance", file: "Fichier", date: "Date", all_analyses: "Toutes les analyses", record: "Enregistrement vocal", import: "Importer un fichier", drop: "Glissez votre fichier audio", start: "Enregistrer", stop: "Arrêter", analyze: "Analyser", analyze_file: "Analyser le fichier", edit_profile: "Modifier le profil", save: "Enregistrer", age: "Âge", birth: "Naissance", gender: "Sexe", location: "Localisation", phone: "Téléphone", lang: "Langue", verify_phone: "Vérification téléphone", send_sms: "Envoyer le code SMS", confirm: "Confirmer", api_ok: "API SER OK", api_err: "API SER HS" },
+    ar: { dashboard: "لوحة التحكم", analyse: "تحليل", historique: "السجل", stats: "الرسوم البيانية", profil: "ملفي", total_analyses: "إجمالي التحليلات", week: "هذا الأسبوع", month: "هذا الشهر", top_emotion: "المشاعر السائدة", activity: "النشاط 7 أيام", repartition: "توزيع المشاعر", recent: "التحليلات الأخيرة", new_analysis: "+ جديد", emotion: "المشاعر", confidence: "الثقة", file: "الملف", date: "التاريخ", all_analyses: "كل التحليلات", record: "تسجيل صوتي", import: "رفع ملف", drop: "اسحب ملفك الصوتي هنا", start: "تسجيل", stop: "إيقاف", analyze: "تحليل", analyze_file: "تحليل الملف", edit_profile: "تعديل الملف الشخصي", save: "حفظ", age: "العمر", birth: "الميلاد", gender: "الجنس", location: "الموقع", phone: "الهاتف", lang: "اللغة", verify_phone: "التحقق من الهاتف", send_sms: "إرسال رمز SMS", confirm: "تأكيد", api_ok: "SER API متصل", api_err: "SER API غير متصل" }
+  };
+  return dict[lang]?.[key] || key;
+}
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('ser_lang', l);
+  document.documentElement.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
+  document.documentElement.lang = l;
+  document.getElementById('lb-fr').classList.toggle('active', l === 'fr');
+  document.getElementById('lb-ar').classList.toggle('active', l === 'ar');
+  const curPage = document.querySelector('.page.active').id.replace('page-', '');
+  document.getElementById('topbar-title').textContent = t(curPage) || t('dashboard');
+  if (['overview','stats'].includes(curPage)) loadStats();
+  if (curPage === 'profil') loadMe();
+  // update button texts
+  document.getElementById('rec-btn-text').innerText = t('start');
+  const analyzeRecBtn = document.getElementById('dash-analyze-rec');
+  if (analyzeRecBtn) analyzeRecBtn.innerText = t('analyze');
+  const analyzeFileBtn = document.getElementById('dash-analyze-file');
+  if (analyzeFileBtn) analyzeFileBtn.innerText = t('analyze_file');
+}
+
+function authH() { return { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }; }
+
+// ================= USER & SIDEBAR =================
+function setSidebarUser() {
+  const initials = (user.fullname || '?').split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+  const av = document.getElementById('sideAvatar');
+  if (user.avatar_b64) { av.innerHTML = `<img src="${user.avatar_b64}" style="width:100%;height:100%;object-fit:cover">`; } 
+  else { av.textContent = initials; }
+  document.getElementById('sideName').textContent = user.fullname || '—';
+  document.getElementById('sideEmail').textContent = user.email || '';
+}
+
+async function loadMe() {
+  try {
+    const r = await fetch(`${AUTH_API}/auth/me`, { headers: authH() });
+    if (r.status === 401) doLogout();
+    if (!r.ok) return;
+    const d = await r.json();
+    user = { ...user, ...d };
+    localStorage.setItem('ser_user', JSON.stringify(user));
+    if (user.language && user.language !== lang) setLang(user.language);
+    setSidebarUser();
+    fillProfilePage(d);
+  } catch(e) {}
+}
+
+function fillProfilePage(u) {
+  const av = document.getElementById('prof-avatar-big');
+  if (u.avatar_b64) av.innerHTML = `<img src="${u.avatar_b64}" style="width:100%;height:100%;object-fit:cover">`;
+  else av.textContent = (u.fullname || '?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('prof-name-big').textContent = u.fullname || '—';
+  document.getElementById('prof-role').textContent = u.profession || u.email || '';
+  document.getElementById('pf-age').textContent = u.age ? `${u.age} ans` : '—';
+  document.getElementById('pf-birth').textContent = u.birthdate ? new Date(u.birthdate).toLocaleDateString('fr') : '—';
+  document.getElementById('pf-gender').textContent = u.gender === 'male' ? 'Homme' : u.gender === 'female' ? 'Femme' : '—';
+  document.getElementById('pf-location').textContent = [u.city, u.country].filter(Boolean).join(', ') || '—';
+  document.getElementById('pf-phone').textContent = u.phone || '—';
+  document.getElementById('pf-lang').textContent = u.language === 'ar' ? 'العربية' : 'Français';
+  document.getElementById('badge-email').innerHTML = u.email_verified ? '✓ Email vérifié' : '✗ Email non vérifié';
+  document.getElementById('badge-phone').innerHTML = u.phone_verified ? '✓ Téléphone vérifié' : '✗ Téléphone non vérifié';
+  if (u.phone_verified) { document.getElementById('send-sms-btn').disabled = true; document.getElementById('send-sms-btn').textContent = '✓ Vérifié'; }
+  document.getElementById('edit-name').value = u.fullname || '';
+  document.getElementById('edit-profession').value = u.profession || '';
+  document.getElementById('edit-birth').value = u.birthdate || '';
+  document.getElementById('edit-gender').value = u.gender || '';
+  document.getElementById('edit-country').value = u.country || '';
+  document.getElementById('edit-city').value = u.city || '';
+  document.getElementById('edit-phone').value = u.phone || '';
+  document.getElementById('edit-lang').value = u.language || 'fr';
+}
+
+// ================= STATS & CHARTS =================
+async function loadStats() {
+  try {
+    const r = await fetch(`${AUTH_API}/analyses/stats`, { headers: authH() });
+    if (!r.ok) return;
+    const d = await r.json();
+    const wk = Object.values(d.week || {}).reduce((a,b)=>a+b,0);
+    const mn = Object.values(d.month || {}).reduce((a,b)=>a+b,0);
+    document.getElementById('ov-total').textContent = d.total || 0;
+    document.getElementById('ov-week').textContent = wk;
+    document.getElementById('ov-month').textContent = mn;
+    if (d.top_emotion) {
+      document.getElementById('ov-top').textContent = EMO_EMOJI[d.top_emotion.emotion] || '—';
+      document.getElementById('ov-top-sub').textContent = d.top_emotion.emotion;
+    }
+    buildCharts(d);
+  } catch(e) {}
+}
+
+function buildCharts(d) {
+  Chart.defaults.color = '#4a5b6e';
+  const gc = '#eef2f6';
+  const days = d.daily.map(x => x.day.slice(5));
+  const counts = d.daily.map(x => x.c);
+  function lineChart(id) {
+    if (charts[id]) charts[id].destroy();
+    const ctx = document.getElementById(id);
+    if (!ctx) return;
+    charts[id] = new Chart(ctx, {
+      type: 'line',
+      data: { labels: days.length ? days : ['L','M','M','J','V','S','D'], datasets: [{ data: counts.length ? counts : [0,0,0,0,0,0,0], borderColor: '#2c6bff', backgroundColor: 'rgba(44,107,255,0.05)', fill: true, tension: 0.3, pointBackgroundColor: '#2c6bff', pointRadius: 3 }] },
+      options: { plugins: { legend: { display: false } }, scales: { x: { grid: { color: gc } }, y: { grid: { color: gc }, beginAtZero: true } }, maintainAspectRatio: false }
+    });
+  }
+  lineChart('dailyChart'); lineChart('dailyChart2');
+  if (charts['donutChart']) charts['donutChart'].destroy();
+  const dc = document.getElementById('donutChart');
+  if (dc) {
+    const emos = Object.keys(d.month || {});
+    const vals = Object.values(d.month || {});
+    charts['donutChart'] = new Chart(dc, {
+      type: 'doughnut',
+      data: { labels: emos, datasets: [{ data: vals.length ? vals : [1], backgroundColor: emos.map(e => EMO_COLORS[e] || '#888'), borderWidth: 0, hoverOffset: 6 }] },
+      options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }, cutout: '65%', maintainAspectRatio: false }
+    });
+  }
+  function barChart(id, data) {
+    if (charts[id]) charts[id].destroy();
+    const ctx = document.getElementById(id);
+    if (!ctx || !data) return;
+    const labels = Object.keys(data);
+    const values = Object.values(data);
+    const colors = labels.map(e => EMO_COLORS[e] || '#888');
+    charts[id] = new Chart(ctx, {
+      type: 'bar',
+      data: { labels, datasets: [{ data: values, backgroundColor: colors, borderRadius: 6, borderSkipped: false }] },
+      options: { plugins: { legend: { display: false } }, scales: { x: { grid: { color: gc } }, y: { grid: { color: gc }, beginAtZero: true } }, maintainAspectRatio: false }
+    });
+  }
+  barChart('weekChart', d.week);
+  barChart('monthChart', d.month);
+}
+
+async function loadHistory() {
+  try {
+    const r = await fetch(`${AUTH_API}/analyses/history`, { headers: authH() });
+    if (!r.ok) return;
+    const data = await r.json();
+    renderTable(data, 'recent-tbody', 5, false);
+    renderTable(data, 'all-tbody', 999, true);
+  } catch(e) {}
+}
+
+function renderTable(data, id, limit, numbered) {
+  const tb = document.getElementById(id);
+  if (!data.length) { tb.innerHTML = `<tr><td colspan="${numbered?5:4}" class="empty">Aucune analyse</td></tr>`; return; }
+  tb.innerHTML = data.slice(0, limit).map((row, i) => {
+    const color = EMO_COLORS[row.emotion] || '#888';
+    const pill = `<span class="emo-pill" style="background:${color}22;color:${color}">${EMO_EMOJI[row.emotion]||'❓'} ${row.emotion}</span>`;
+    const conf = (row.confidence*100).toFixed(1)+'%';
+    const date = new Date(row.created_at).toLocaleString('fr');
+    const num = numbered ? `<td>${i+1}</td>` : '';
+    return `<tr>${num}<td>${pill}</td><td>${conf}</td><td style="color:var(--text-muted)">${row.filename||'—'}</td><td style="color:var(--text-muted)">${date}</td></tr>`;
+  }).join('');
+}
+
+// ================= RECORDING =================
+async function toggleRec() {
+  if (dashRec && dashRec.state === 'recording') {
+    dashRec.stop();
+    return;
+  }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    dashRec = new MediaRecorder(stream);
+    dashChunks = [];
+    dashRec.ondataavailable = e => dashChunks.push(e.data);
+    dashRec.onstop = () => {
+      dashBlob = new Blob(dashChunks, { type: 'audio/wav' });
+      stream.getTracks().forEach(t => t.stop());
+      clearInterval(dashTimer);
+      document.getElementById('dash-waveform').classList.remove('rec-active');
+      document.getElementById('rec-btn-text').innerText = t('start');
+      document.getElementById('dash-analyze-rec').disabled = false;
+      showToast("Enregistrement terminé, vous pouvez analyser", "success");
+    };
+    dashRec.start();
+    dashSecs = 0;
+    document.getElementById('dash-waveform').classList.add('rec-active');
+    document.getElementById('rec-btn-text').innerText = t('stop');
+    document.getElementById('dash-analyze-rec').disabled = true;
+    dashTimer = setInterval(() => {
+      dashSecs++;
+      const mins = Math.floor(dashSecs/60);
+      const secs = dashSecs % 60;
+      document.getElementById('dash-timer').innerText = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+    }, 1000);
+  } catch(e) { showToast('Microphone inaccessible', 'error'); }
+}
+
+function analyzeRec() {
+  if (dashBlob) sendToSER(dashBlob, `enregistrement_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.wav`);
+  else showToast("Aucun enregistrement à analyser", "error");
+}
+
+// ================= FILE IMPORT =================
+function handleFile(f) {
+  if (!f) return;
+  dashFile = f;
+  const infoDiv = document.getElementById('dash-file-info');
+  infoDiv.style.display = 'flex';
+  infoDiv.innerHTML = `<span>${f.name} (${(f.size/1024).toFixed(0)} KB)</span>
+                       <button class="remove-file-btn" onclick="clearFile()" title="Supprimer le fichier">✖</button>`;
+  document.getElementById('dash-analyze-file').disabled = false;
+}
+
+function clearFile() {
+  dashFile = null;
+  document.getElementById('dash-file-info').style.display = 'none';
+  document.getElementById('dash-file-info').innerHTML = '';
+  document.getElementById('dash-analyze-file').disabled = true;
+  document.getElementById('dash-drop').classList.remove('dragover');
+  document.getElementById('dash-file').value = '';
+  showToast('Fichier supprimé', 'info');
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('dash-drop').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file && (file.type.includes('audio') || file.name.match(/\.(wav|mp3|m4a)$/i))) {
+    handleFile(file);
+  } else {
+    showToast('Format non supporté. Utilisez WAV, MP3 ou M4A.', 'error');
+  }
+}
+
+function analyzeFile() {
+  if (dashFile) sendToSER(dashFile, dashFile.name);
+  else showToast("Aucun fichier sélectionné", "error");
+}
+
+// ================= SEND TO SER API =================
+async function sendToSER(blob, filename) {
+  const rb = document.getElementById('dash-result');
+  rb.className = 'result-box show';
+  rb.innerHTML = '<div style="text-align:center;padding:1rem;"><div class="spinner"></div><p style="margin-top:0.5rem;">Analyse en cours...</p></div>';
+  try {
+    const fd = new FormData();
+    fd.append('file', blob, filename);
+    const r = await fetch(`${SER_API}/predict/`, { method: 'POST', body: fd });
+    if (!r.ok) throw new Error(`Erreur API (statut ${r.status})`);
+    const d = await r.json();
+    showResult(d);
+    await fetch(`${AUTH_API}/analyses/save`, {
+      method: 'POST',
+      headers: authH(),
+      body: JSON.stringify({ emotion: d.emotion, confidence: d.confidence, filename })
+    });
+    await loadStats();
+    await loadHistory();
+    showToast('Analyse sauvegardée ✓', 'success');
+    // Reset recording state
+    dashBlob = null;
+    document.getElementById('dash-analyze-rec').disabled = true;
+    document.getElementById('dash-timer').innerText = "00:00";
+  } catch(e) {
+    rb.innerHTML = `<div style="text-align:center;color:#ef4444;padding:1rem;">❌ ERREUR : ${e.message}</div>`;
+    showToast(e.message, 'error');
+  }
+}
+
+function showResult(d) {
+  const all = d.all_results || [];
+  const bars = all.map(r => {
+    const pct = (r.confidence*100).toFixed(1);
+    const color = EMO_COLORS[r.emotion] || '#888';
+    return `<div class="prob-row"><span style="width:20px">${EMO_EMOJI[r.emotion]||'❓'}</span><span style="width:70px">${r.emotion}</span><div class="prob-track"><div class="prob-fill" style="width:${pct}%;background:${color}"></div></div><span style="width:40px">${pct}%</span></div>`;
+  }).join('');
+  document.getElementById('dash-result').innerHTML = `<div style="font-size:2.5rem; text-align:center;">${EMO_EMOJI[d.emotion]||'❓'}</div><div style="font-size:1.2rem; font-weight:700; text-align:center;">${d.emotion}</div><div style="text-align:center; margin:0.5rem 0;">Confiance: ${(d.confidence*100).toFixed(1)}%</div>${bars}`;
+}
+
+// ================= PROFILE & PHONE =================
+async function saveProfile() {
+  const body = {
+    fullname: document.getElementById('edit-name').value.trim() || undefined,
+    profession: document.getElementById('edit-profession').value.trim() || undefined,
+    birthdate: document.getElementById('edit-birth').value || undefined,
+    gender: document.getElementById('edit-gender').value || undefined,
+    country: document.getElementById('edit-country').value.trim() || undefined,
+    city: document.getElementById('edit-city').value.trim() || undefined,
+    phone: document.getElementById('edit-phone').value.trim() || undefined,
+    language: document.getElementById('edit-lang').value || undefined
+  };
+  Object.keys(body).forEach(k => body[k] === undefined && delete body[k]);
+  try {
+    const r = await fetch(`${AUTH_API}/auth/profile`, { method: 'PUT', headers: authH(), body: JSON.stringify(body) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.detail || 'Erreur');
+    user = { ...user, ...d };
+    localStorage.setItem('ser_user', JSON.stringify(user));
+    if (body.language) { lang = body.language; setLang(lang); }
+    setSidebarUser(); fillProfilePage(d);
+    showToast('Profil mis à jour', 'success');
+  } catch(e) { showToast(e.message, 'error'); }
+}
+
+async function uploadAvatar(input) {
+  const f = input.files[0];
+  if (!f) return;
+  const fd = new FormData();
+  fd.append('file', f, f.name);
+  try {
+    const r = await fetch(`${AUTH_API}/auth/avatar`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, body: fd });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.detail || 'Erreur');
+    user.avatar_b64 = d.avatar_b64;
+    localStorage.setItem('ser_user', JSON.stringify(user));
+    setSidebarUser();
+    document.getElementById('prof-avatar-big').innerHTML = `<img src="${d.avatar_b64}" style="width:100%;height:100%;object-fit:cover">`;
+    showToast('Photo mise à jour', 'success');
+  } catch(e) { showToast(e.message, 'error'); }
+}
+
+async function sendPhoneCode() {
+  const phone = document.getElementById('edit-phone').value.trim();
+  if (!phone) { showToast('Numéro requis', 'error'); return; }
+  await fetch(`${AUTH_API}/auth/profile`, { method: 'PUT', headers: authH(), body: JSON.stringify({ phone }) });
+  try {
+    const r = await fetch(`${AUTH_API}/auth/send-phone-code`, { method: 'POST', headers: authH() });
+    const d = await r.json();
+    document.getElementById('phone-otp-area').style.display = 'block';
+    showToast(`Code SMS (dev) : ${d.dev_code}`, 'success');
+  } catch(e) { showToast(e.message, 'error'); }
+}
+
+async function confirmPhone() {
+  const code = document.getElementById('phone-otp-code').value.trim();
+  const phone = document.getElementById('edit-phone').value.trim();
+  if (code.length < 6) { showToast('Code incomplet', 'error'); return; }
+  try {
+    const r = await fetch(`${AUTH_API}/auth/verify-phone`, { method: 'POST', headers: authH(), body: JSON.stringify({ phone, code }) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.detail);
+    showToast('Téléphone vérifié !', 'success');
+    document.getElementById('phone-otp-area').style.display = 'none';
+    await loadMe();
+  } catch(e) { showToast(e.message, 'error'); }
+}
+
+// ================= NAVIGATION =================
+function goPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`page-${page}`).classList.add('active');
+  const activeNav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.getAttribute('data-page') === page);
+  if (activeNav) activeNav.classList.add('active');
+  document.getElementById('topbar-title').textContent = t(page) || t('dashboard');
+  if (page === 'stats') loadStats();
+  if (page === 'profil') loadMe();
+}
+
+document.querySelectorAll('.nav-item').forEach(btn => { btn.addEventListener('click', () => { document.querySelector('.sidebar').style.transform='translateX(-100%)'; });
+  btn.addEventListener('click', () => goPage(btn.getAttribute('data-page')));
+});
+
+// ================= API CHECK & TOAST =================
+async function checkAPI() {
+  try {
+    await fetch(`${SER_API}/`, { signal: AbortSignal.timeout(3000) });
+    document.getElementById('api-dot').className = 'api-dot ok';
+    document.getElementById('api-status-txt').innerText = t('api_ok');
+  } catch {
+    document.getElementById('api-dot').className = 'api-dot err';
+    document.getElementById('api-status-txt').innerText = t('api_err');
+  }
+}
+
+function showToast(msg, type = 'success') {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = `toast show ${type}`;
+  setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+function doLogout() {
+  localStorage.removeItem('ser_token');
+  localStorage.removeItem('ser_user');
+  window.location.href = 'index.html';
+}
+
+// ================= INIT =================
+window.addEventListener('DOMContentLoaded', () => {
+  setLang(lang);
+  setSidebarUser();
+  loadMe();
+  loadStats();
+  loadHistory();
+  checkAPI();
+  setInterval(checkAPI, 15000);
+});
+</script>
+</body>
+</html>
